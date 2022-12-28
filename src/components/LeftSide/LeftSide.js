@@ -3,7 +3,7 @@ import { FaUserFriends, FaPhotoVideo } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthProvider/AuthProvider';
 
-const LeftSide = () => {
+const LeftSide = ({currentUser}) => {
     const { user, logOut } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -19,8 +19,8 @@ const LeftSide = () => {
     return (
         <div className='ml-5'>
             <div className='flex gap-4'>
-                <img className='h-10 w-10 rounded-full' src="" alt="" />
-                <span className='flex gap-2'> {user?.displayName}</span>
+                <img className='h-10 w-10 rounded-full' src={currentUser?.image} alt="" />
+                <span className='flex gap-2'> {currentUser?.name}</span>
             </div>
             <div className='flex flex-col justify-center'>
                 <button className='flex gap-4 btn-ghost px-4 py-2'><FaUserFriends></FaUserFriends> Friends</button>
