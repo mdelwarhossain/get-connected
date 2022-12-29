@@ -6,6 +6,7 @@ import Login from "../../Pages/Login/Login";
 import PostDetails from "../../Pages/Posts/PostDetails";
 import Posts from "../../Pages/Posts/Posts";
 import SignUp from "../../Pages/SignUp/SignUp";
+import PrivateRoute from "../PrivateRoute/PrivateRoute";
 
 const router = createBrowserRouter([
     {
@@ -18,7 +19,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/home', 
-                element: <Home></Home>
+                element: <PrivateRoute><Home></Home></PrivateRoute>
             },
             {
                 path: '/posts', 
@@ -26,12 +27,12 @@ const router = createBrowserRouter([
             },
             {
                 path: '/posts/:id', 
-                element: <PostDetails></PostDetails>,
+                element: <PrivateRoute><PostDetails></PostDetails></PrivateRoute>,
                 loader: ({params}) => fetch(`http://localhost:5000/posts/${params.id}`)
             },
             {
                 path: '/about', 
-                element: <About></About>
+                element: <PrivateRoute><About></About></PrivateRoute>
             },
             {
                 path: '/signup', 

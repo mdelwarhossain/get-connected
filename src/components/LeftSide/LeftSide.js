@@ -17,8 +17,8 @@ const LeftSide = ({currentUser}) => {
     console.log(user);
 
     return (
-        <div className='ml-5'>
-            <div className='flex gap-4'>
+        <div className="card w-96 md:w-[18rem] bg-base-100 shadow-xl mt-5 mx-5">
+            <div className='flex gap-4 ml-2 mt-2'>
                 <img className='h-10 w-10 rounded-full' src={currentUser?.image} alt="" />
                 <span className='flex gap-2'> {currentUser?.name}</span>
             </div>

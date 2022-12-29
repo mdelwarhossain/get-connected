@@ -5,6 +5,7 @@ import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import LeftSide from '../../components/LeftSide/LeftSide';
 import { AuthContext } from '../../context/AuthProvider/AuthProvider';
+import PopularPosts from '../Posts/PopularPosts';
 import Loading from '../Shared/Loading';
 import './Home.css'
 
@@ -16,7 +17,7 @@ const Home = () => {
 
     const navigate = useNavigate();
 
-    const { data: currentUser, isLoading, refetch } = useQuery({
+    const { data: currentUser, isLoading } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
             try {
@@ -57,9 +58,10 @@ const Home = () => {
                         url: currentUser?.image,
                         image: imgData.data.url,
                         posted: new Date(),
+                        like: 0,
                     }
 
-                    // save product to the database
+                    // save post to the database
                     fetch('http://localhost:5000/post', {
                         method: 'POST',
                         headers: {
@@ -77,6 +79,26 @@ const Home = () => {
             })
     }
 
+    // get popular posts
+    const { data: popularposts, refetch } = useQuery({
+        queryKey: ['popularposts'],
+        queryFn: async () => {
+            try {
+                const res = await fetch('http://localhost:5000/popularposts', {
+                    headers: {
+                        authorization: `bearer ${localStorage.getItem('accessToken')}`
+                    }
+                });
+                const data = await res.json();
+                return data;
+            }
+            catch (error) {
+
+            }
+        }
+    });
+    console.log(popularposts);
+
     if (isLoading) {
         return <Loading></Loading>
     }
@@ -84,40 +106,49 @@ const Home = () => {
     console.log(currentUser);
 
     return (
-        <div className='home grid grid-cols-1 md:grid-cols-2 justify-items-start rounded-md'>
-            <div className='leftside md:w-[18rem]'>
+        <div className='md:flex justify-between rounded-md mr-5'>
+            <div className='leftside col-span-1'>
                 <LeftSide
                     key={currentUser?._id}
                     currentUser={currentUser}
                 ></LeftSide>
             </div>
-            <form onSubmit={handleSubmit(handleAddPost)}>
-                <div className='gap-8'>
-                    <div className='flex gap-4 mb-4'>
-                    <img className='h-10 w-10 rounded-full' src={currentUser?.image} alt="" />
-                        <p>{currentUser?.name}</p>
-                    </div>
-                    <div className="form-control w-full max-w-xs">
+            <div>
+                <div className="bg-base-100 shadow-xl my-6">
+                    <form onSubmit={handleSubmit(handleAddPost)} className='ml-5 mt-2'>
+                        <div className='gap-8'>
+                            <div className='flex gap-4 mb-4'>
+                                <img className='h-10 w-10 rounded-full' src={currentUser?.image} alt="" />
+                                <p>{currentUser?.name}</p>
+                            </div>
+                            <div className="form-control w-full max-w-xs">
 
-                        <input type="text" {...register("post", {
-                            required: "Name is Required"
-                        })} placeholder="What's on your mind" className="input input-bordered w-full max-w-xs" />
-                        {errors.post && <p className='text-red-500'>{errors.title.message}</p>}
-                    </div>
+                                <input type="text" {...register("post", {
+                                    required: "Name is Required"
+                                })} placeholder="What's on your mind" className="input input-bordered w-full max-w-xs bg-gray-200" />
+                                {errors.post && <p className='text-red-500'>{errors.title.message}</p>}
+                            </div>
+                        </div>
+                        <div className='flex my-5'>
+                            <div className="form-control w-full max-w-xs">
+                                <input type="file" {...register("image", {
+                                    required: "Photo is Required"
+                                })} className="input w-full max-w-xs" />
+                                {errors.img && <p className='text-red-500'>{errors.img.message}</p>}
+                            </div>
+                            <input className='btn btn-ghost mb-5' value="Share" type="submit" />
+                        </div>
+                    </form>
                 </div>
-                <div className='flex my-5'>
-                    <div className="form-control w-full max-w-xs">
-                        <input type="file" {...register("image", {
-                            required: "Photo is Required"
-                        })} className="input w-full max-w-xs" />
-                        {errors.img && <p className='text-red-500'>{errors.img.message}</p>}
-                    </div>
-                    <input className='btn btn-ghost' value="Share" type="submit" />
+                <div className="bg-base-100 shadow-xl mt-5 col-start-2 col-end-auto">
+                    {
+                        popularposts?.map(ppost => <PopularPosts
+                            key={ppost._id}
+                            ppost={ppost}
+                        ></PopularPosts>)
+                    }
                 </div>
-                <div className='my-5'>
-
-                </div>
-            </form>
+            </div>
         </div>
     );
 };
