@@ -48,7 +48,7 @@ const SignUp = () => {
             sex
         };
         console.log(user);
-        fetch('http://localhost:5000/users', {
+        fetch('https://social-media-server-phi.vercel.app/users', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'

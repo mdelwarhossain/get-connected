@@ -38,7 +38,7 @@ const Modal = ({ currentUser, setCurrentUser, refetch }) => {
                     console.log(profile);
 
                     // save product to the database
-                    fetch(`http://localhost:5000/users/${currentUser.email}`, {
+                    fetch(`https://social-media-server-phi.vercel.app/users/${currentUser.email}`, {
                         method: 'PUT',
                         headers: {
                             'content-type': 'application/json',

@@ -11,7 +11,7 @@ const About = () => {
         queryKey: ['users'],
         queryFn: async () => {
             try {
-                const res = await fetch(`http://localhost:5000/users/${user?.email}`, {
+                const res = await fetch(`https://social-media-server-phi.vercel.app/users/${user?.email}`, {
                     headers: {
                         authorization: `bearer ${localStorage.getItem('accessToken')}`
                     }

@@ -14,7 +14,7 @@ const Posts = () => {
     const { data: posts = [] } = useQuery({
         queryKey: ['allbuyers'],
         queryFn: async () => {
-            const res = await fetch('http://localhost:5000/posts', {
+            const res = await fetch('https://social-media-server-phi.vercel.app/posts', {
                 headers: {
                     authorization: `bearer ${localStorage.getItem('accessToken')}`
                 }
@@ -28,7 +28,7 @@ const Posts = () => {
         queryKey: ['users'],
         queryFn: async () => {
             try {
-                const res = await fetch(`http://localhost:5000/users/${user?.email}`, {
+                const res = await fetch(`https://social-media-server-phi.vercel.app/users/${user?.email}`, {
                     headers: {
                         authorization: `bearer ${localStorage.getItem('accessToken')}`
                     }
@@ -57,7 +57,7 @@ const Posts = () => {
 
         }
         // save comments to the database
-        fetch('http://localhost:5000/comments', {
+        fetch('https://social-media-server-phi.vercel.app/comments', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
@@ -78,7 +78,7 @@ const Posts = () => {
         queryKey: ['comments'],
         queryFn: async () => {
             try {
-                const res = await fetch(`http://localhost:5000/comments/${id}`, {
+                const res = await fetch(`https://social-media-server-phi.vercel.app/comments/${id}`, {
                     headers: {
                         authorization: `bearer ${localStorage.getItem('accessToken')}`
                     }
@@ -102,7 +102,7 @@ const Posts = () => {
             like: count,
         }
         // save comments to the database
-        fetch(`http://localhost:5000/like/${id}`, {
+        fetch(`https://social-media-server-phi.vercel.app/like/${id}`, {
             method: 'PUT',
             headers: {
                 'content-type': 'application/json',
