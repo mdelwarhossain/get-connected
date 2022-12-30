@@ -58,7 +58,7 @@ const Posts = () => {
         }
 
         // save comments to the database
-        fetch(`http://localhost:5000/comments/${id}`, {
+        fetch(`https://social-media-server-phi.vercel.app/comments/${id}`, {
             method: 'PUT',
             headers: {
                 'content-type': 'application/json',
