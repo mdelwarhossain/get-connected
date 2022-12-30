@@ -7,6 +7,7 @@ import Loading from '../Shared/Loading';
 const About = () => {
     const [currentUser, setCurrentUser] = useState(null); 
     const { user } = useContext(AuthContext);
+    console.log(user);
     const { data, isLoading, refetch } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {

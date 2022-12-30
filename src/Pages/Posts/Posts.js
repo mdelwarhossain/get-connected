@@ -119,39 +119,32 @@ const Posts = () => {
                         <p>{post?.post}</p>
                     </div>
                     <figure><img className='w-full' src={post?.image} alt="Shoes" /></figure>
-                    <div className='flex justify-evenly my-4 mx-4'>
-                        <div className='mt-4'>
+                    <div className='my-4 mx-4'>
+                        <div className='mt-4 flex justify-around '>
+                            <div>
                             <button onClick={() => handleLike(post?._id)}>Like</button>
                             <span className='ml-2' id='like'>{post?.like}</span>
+                            </div>
+                            <span>Comment {post?.comments?.length}</span>
+                            <span className=''><Link to={`/posts/${post._id}`} >Details</Link></span>
                         </div>
-                        <span className="collapse">
-                            <input type="checkbox" />
-                            <div className="collapse-title">
-                                <div>
-                                    Comment {post?.comments?.length}
-                                </div>
-                                <div className='flex gap-4 mt-4'>
-                                    <img className='h-10 w-10 rounded-full' src={currentUser?.image} alt="" />
-                                    <input onChange={handleChange} type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs" />
-                                    <button onClick={() => handleSubmit(post?._id)} className='btn btn-ghost'>Submit</button>
-                                </div>
-                            </div>
-
-                            <div className="collapse-content">
-                                <div className='gap-4'>
-                                    {
-                                        post?.comments?.map(data => <Comments
-                                            id={comment._id}
-                                            data={data}
-                                        ></Comments>)
-                                    }
-
-                                </div>
-                            </div>
-
-                        </span>
-                        <span className='mt-4'><Link to={`/posts/${post._id}`} >Details</Link></span>
+                        <div className='flex gap-4 mt-6 w-2/3 mx-auto'>
+                            <img className='h-10 w-10 rounded-full' src={currentUser?.image} alt="" />
+                            <input onChange={handleChange} type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs" />
+                            <button onClick={() => handleSubmit(post?._id)} className='btn btn-ghost'>Submit</button>
+                        </div>
+                        
+                        
                     </div>
+                    <div className='gap-4 ml-10'>
+                            {
+                                post?.comments?.map(data => <Comments
+                                    id={comment._id}
+                                    data={data}
+                                ></Comments>)
+                            }
+
+                        </div>
                 </div>)
             }
         </div>

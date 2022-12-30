@@ -14,7 +14,7 @@ const LeftSide = ({currentUser}) => {
             })
             .catch(err => console.log(err));
     }
-    console.log(user.displayName, user.email);
+    
 
     return (
         <div className="card w-96 md:w-[18rem] bg-base-100 shadow-xl mt-5 mx-5">
