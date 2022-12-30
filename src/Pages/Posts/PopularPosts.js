@@ -10,7 +10,7 @@ const PopularPosts = ({ ppost }) => {
                 </div>
                 <p>{ppost?.post}</p>
             </div>
-            <figure><img className='w-full' src={ppost?.image} alt="Shoes" /></figure>
+            <figure><img className='w-full' src={ppost?.image} alt="PostImg" /></figure>
         </div>
     );
 };

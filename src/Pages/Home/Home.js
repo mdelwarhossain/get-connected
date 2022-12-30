@@ -113,13 +113,13 @@ const Home = () => {
                     currentUser={currentUser}
                 ></LeftSide>
             </div>
-            <div>
+            <div className='w-full mx-7'>
                 <div className="bg-base-100 shadow-xl my-6">
                     <form onSubmit={handleSubmit(handleAddPost)} className='ml-5 mt-2'>
                         <div className='gap-8'>
                             <div className='flex gap-4 mb-4'>
                                 <img className='h-10 w-10 rounded-full' src={currentUser?.image} alt="" />
-                                <p>{currentUser?.name}</p>
+                                <p className='mt-2'>{currentUser?.name}</p>
                             </div>
                             <div className="form-control w-full max-w-xs">
 

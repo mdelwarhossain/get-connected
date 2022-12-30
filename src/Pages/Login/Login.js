@@ -8,7 +8,7 @@ const Login = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
     const { signIn, googleSignIn } = useContext(AuthContext);
     const [loginError, setLoginError] = useState('');
-    const [loginUserEmail, setLoginUserEmail] = useState(''); 
+    const [loginUserEmail, setLoginUserEmail] = useState('');
     // const [token] = useToken(loginUserEmail); 
     const location = useLocation();
     const navigate = useNavigate();
@@ -38,9 +38,27 @@ const Login = () => {
 
     const handleGoogleSignIn = () => {
         googleSignIn()
-            .then(() => {
-                navigate(from, {replace: true});
-             })
+            .then((result) => {
+                // save user to db
+                const user = result.user;
+                const googleUser = {
+                    name: user?.displayName,
+                    email: user?.email
+                }
+                console.log(googleUser);
+                fetch(`http://localhost:5000/googleUsers/${user?.email}`, {
+                    method: 'PUT',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify(googleUser)
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        navigate('/home');
+                    })
+                navigate(from, { replace: true });
+            })
             .catch(err => {
                 console.log(err)
             });

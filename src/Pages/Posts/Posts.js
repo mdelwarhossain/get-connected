@@ -11,7 +11,7 @@ const Posts = () => {
     const [id, setId] = useState(null);
     const navigate = useNavigate();
     const { user } = useContext(AuthContext);
-    const { data: posts = [] } = useQuery({
+    const { data: posts = [], refetch } = useQuery({
         queryKey: ['allbuyers'],
         queryFn: async () => {
             const res = await fetch('https://social-media-server-phi.vercel.app/posts', {
@@ -23,6 +23,7 @@ const Posts = () => {
             return data;
         }
     });
+    console.log(posts);
 
     const { data: currentUser, isLoading } = useQuery({
         queryKey: ['users'],
@@ -47,18 +48,18 @@ const Posts = () => {
     const handleChange = (event) => {
         comment = event.target.value;
     }
-    const handleShare = (id) => {
-        setId(id);
+    const handleSubmit = (id) => {
+        // setId(id);
         const commentData = {
-            id,
             name: currentUser?.name,
             image: currentUser?.image,
             comment,
 
         }
+
         // save comments to the database
-        fetch('https://social-media-server-phi.vercel.app/comments', {
-            method: 'POST',
+        fetch(`http://localhost:5000/comments/${id}`, {
+            method: 'PUT',
             headers: {
                 'content-type': 'application/json',
             },
@@ -73,25 +74,6 @@ const Posts = () => {
             })
     }
 
-
-    const { data: comments, refetch } = useQuery({
-        queryKey: ['comments'],
-        queryFn: async () => {
-            try {
-                const res = await fetch(`https://social-media-server-phi.vercel.app/comments/${id}`, {
-                    headers: {
-                        authorization: `bearer ${localStorage.getItem('accessToken')}`
-                    }
-                });
-                const data = await res.json();
-                return data;
-            }
-            catch (error) {
-
-            }
-        }
-    });
-
     const handleLike = (id) => {
         console.log(id);
         let likeFieled = document.getElementById("like").innerText;
@@ -101,7 +83,7 @@ const Posts = () => {
         const like = {
             like: count,
         }
-        // save comments to the database
+        // save like to the database
         fetch(`https://social-media-server-phi.vercel.app/like/${id}`, {
             method: 'PUT',
             headers: {
@@ -118,8 +100,6 @@ const Posts = () => {
             })
         // return count;
     }
-
-    console.log('comments', comments);
 
     if (isLoading) {
         return <Loading></Loading>
@@ -140,30 +120,35 @@ const Posts = () => {
                     </div>
                     <figure><img className='w-full' src={post?.image} alt="Shoes" /></figure>
                     <div className='flex justify-evenly my-4 mx-4'>
-                        <button onClick={() => handleLike(post?._id)} className=''>Like</button>
-                        <span id='like'>{post?.like}</span>
+                        <div className='mt-4'>
+                            <button onClick={() => handleLike(post?._id)}>Like</button>
+                            <span className='ml-2' id='like'>{post?.like}</span>
+                        </div>
                         <span className="collapse">
                             <input type="checkbox" />
                             <div className="collapse-title">
-                                Comment
-                            </div>
-                            <div className="collapse-content">
-                                <div className='flex gap-4'>
-                                    <img src="" alt={currentUser?.image} />
+                                <div>
+                                    Comment {post?.comments?.length}
+                                </div>
+                                <div className='flex gap-4 mt-4'>
+                                    <img className='h-10 w-10 rounded-full' src={currentUser?.image} alt="" />
                                     <input onChange={handleChange} type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs" />
-                                    <button onClick={() => handleShare(post?._id)} className='btn btn-ghost'>Share</button>
+                                    <button onClick={() => handleSubmit(post?._id)} className='btn btn-ghost'>Submit</button>
+                                </div>
+                            </div>
+
+                            <div className="collapse-content">
+                                <div className='gap-4'>
+                                    {
+                                        post?.comments?.map(data => <Comments
+                                            id={comment._id}
+                                            data={data}
+                                        ></Comments>)
+                                    }
 
                                 </div>
                             </div>
-                            <div>
-                                {
-                                    post._id === id &&
-                                    comments?.map(data => <Comments
-                                        id={comment._id}
-                                        data={data}
-                                    ></Comments>)
-                                }
-                            </div>
+
                         </span>
                         <span className='mt-4'><Link to={`/posts/${post._id}`} >Details</Link></span>
                     </div>
